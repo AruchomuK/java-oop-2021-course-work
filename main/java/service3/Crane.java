@@ -1,13 +1,12 @@
 package service3;
 
 import lombok.Getter;
-import lombok.Setter;
-import service1.cargo.CargoType;
 import service1.ship.Ship;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Crane extends Thread {
+public class Crane implements Callable<Object> {
 
     private int currentTime = -43200;
 
@@ -22,22 +21,11 @@ public class Crane extends Thread {
     }
 
     @Override
-    public void run() {
+    public Object call() throws InterruptedException {
         while (!ships.isEmpty()) {
             Ship currentShip = ships.poll();
 
             currentTime = Math.max(currentTime, currentShip.getArrivalTime());
-
-            //int currentShipWorkingCranes = currentShip.getWorkingCranesQuantity();
-
-            //currentShip.setWorkingCranesQuantity(currentShipWorkingCranes + 1);
-
-                /*if (currentShip.getWorkingCranesQuantity() == 2) {
-                    int newUnloadingTime = currentShip.calculateUnloadingTime(currentShip.getCargo(),
-                            currentShip.getWorkingCranesPerformance() * 2);
-                    currentShip.setUnloadingTime(newUnloadingTime);
-                }*/
-
             currentTime += currentShip.getUnloadingTime();
 
             Ship nextShip = ships.peek();
@@ -49,7 +37,10 @@ public class Crane extends Thread {
             if (nextShip.getArrivalTime() < currentTime) {
                 craneFine += calculateFine(currentTime - nextShip.getArrivalTime());
             }
+
+            Thread.sleep(1);
         }
+        return null;
     }
 
     public int calculateFine(int penaltyTime) {

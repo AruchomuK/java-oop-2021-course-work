@@ -1,5 +1,6 @@
 package service3;
 
+import lombok.Getter;
 import service1.ship.Ship;
 import service1.ship.ShipGenerator;
 
@@ -13,6 +14,9 @@ public class Schedule {
     private final int MIN_ARRIVAL_DELAY_MINUTES = -10080;
     private final int MAX_UNLOADING_DELAY_MINUTES = 1440;
 
+    @Getter
+    List<Ship> schedule;
+
     Random rand = new Random();
 
     public int generateArrivalDelay() {
@@ -24,7 +28,7 @@ public class Schedule {
     }
 
     public List<Ship> generateSchedule() {
-        List<Ship> schedule = new ArrayList<Ship>();
+        schedule = new ArrayList<Ship>();
         ShipGenerator shipGenerator = new ShipGenerator();
 
         for (int i = 0; i < 1000; i++) {

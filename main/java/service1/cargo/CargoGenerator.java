@@ -19,6 +19,6 @@ public class CargoGenerator {
     }
 
     public int generateWeightOrQuantity() {
-        return rand.nextInt(100); // Random number, idk why, needs to clarify
+        return rand.nextInt(100);
     }
 }

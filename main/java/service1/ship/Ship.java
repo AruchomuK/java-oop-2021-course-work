@@ -12,10 +12,6 @@ public class Ship {
     private int arrivalTime;
     private int unloadingTime;
     private int workingCranesPerformance;
-
-    /*public int calculateUnloadingTime(Cargo cargo, int cranePerformance) {
-        return cargo.getWeightOrQuantity() / cranePerformance;
-    }*/
 }
 
 
