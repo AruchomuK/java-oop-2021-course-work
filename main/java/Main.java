@@ -1,13 +1,20 @@
+import service1.ship.Ship;
+import service2.JSONReader;
 import service3.Schedule;
 import service3.ShipsDistribution;
 import service3.ShipsUnloading;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         Schedule schedule = new Schedule();
         schedule.generateSchedule();
 
-        ShipsDistribution shipsDistribution = new ShipsDistribution(schedule.getSchedule());
+        JSONReader jsonReader = new JSONReader();
+        List<Ship> shipListFromSchedule = jsonReader.readSchedule();
+
+        ShipsDistribution shipsDistribution = new ShipsDistribution(shipListFromSchedule);
 
         ShipsUnloading looseShipsUnloading = new ShipsUnloading(shipsDistribution.getLooseCargos());
         ShipsUnloading liquidShipsUnloading = new ShipsUnloading(shipsDistribution.getLiquidCargos());

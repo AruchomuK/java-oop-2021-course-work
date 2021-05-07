@@ -1,42 +1,94 @@
 package service2;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.AllArgsConstructor;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import service1.cargo.Cargo;
+import service1.cargo.CargoType;
 import service1.ship.Ship;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 
 @AllArgsConstructor
 public class JSONWriter {
     List<Ship> ships;
 
     public void writeSchedule() {
-        JSONArray jsonShipsArray = new JSONArray();
+        final String filename = "schedule.json";
 
-        for (Ship ship : ships) {
-            JSONObject jsonShip = new JSONObject();
-            jsonShip.put("Name", ship.getName());
-            jsonShip.put("Cargo type", ship.getCargo().getCargoType());
-            jsonShip.put("Cargo quantity", ship.getCargo().getWeightOrQuantity());
-            jsonShip.put("Arrival time", ship.getArrivalTime());
-            jsonShip.put("Unloading time", ship.getUnloadingTime());
-            jsonShip.put("Working crane performance", ship.getWorkingCranesPerformance());
+        ObjectMapper mapper = new ObjectMapper();
 
-            jsonShipsArray.add(jsonShip);
-        }
-
-        JSONObject jsonSchedule = new JSONObject();
-        jsonSchedule.put("Schedule", jsonShipsArray);
-
-        try (FileWriter file = new FileWriter("schedule.json")) {
-            file.write(jsonSchedule.toJSONString());
+        try {
+            mapper.writeValue(Paths.get(filename).toFile(), ships);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addManually(List<Ship> schedule) {
+        Scanner in = new Scanner(System.in);
+
+        String userAnswer = "y";
+
+        while (!userAnswer.equals("n")) {
+            System.out.println("Do you want to add one more ship? y/n: ");
+
+            userAnswer = in.next();
+
+            if (userAnswer.equals("y") || userAnswer.equals("yes")) {
+                System.out.println("Enter the ship's name: ");
+                String name = in.next();
+
+                System.out.println("Enter the cargo' type (0 for LOOSE, 1 for LIQUID, 2 for CONTAINER): ");
+                int cargoTypeAsInt = in.nextInt();
+
+                System.out.println("Enter the cargo's weight or quantity: ");
+                int weightOrQuantity = in.nextInt();
+
+                System.out.println("Enter the ship's arrival time: ");
+                int arrivalTime = in.nextInt();
+
+                CargoType cargoType;
+                switch(cargoTypeAsInt) {
+                    case 0:
+                        cargoType = CargoType.LOOSE;
+                        break;
+                    case 1:
+                        cargoType = CargoType.LIQUID;
+                        break;
+                    case 2:
+                        cargoType = CargoType.CONTAINER;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + cargoTypeAsInt);
+                }
+
+                int workingCranesPerformance = 0;
+                switch(cargoTypeAsInt) {
+                    case 0:
+                        workingCranesPerformance = 1;
+                        break;
+                    case 1:
+                        workingCranesPerformance = 2;
+                        break;
+                    case 2:
+                        workingCranesPerformance = 3;
+                        break;
+                }
+
+                int unloadingTime = weightOrQuantity / workingCranesPerformance;
+
+                Cargo cargo = new Cargo(cargoType, weightOrQuantity);
+
+                Ship ship = new Ship(name, cargo, arrivalTime, unloadingTime, workingCranesPerformance);
+
+                schedule.sort(Comparator.comparingInt(Ship::getArrivalTime));
+            }
+        }
+
     }
 }

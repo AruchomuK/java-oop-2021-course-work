@@ -1,7 +1,6 @@
 package service3;
 
 import lombok.Getter;
-import service1.cargo.CargoType;
 import service1.ship.Ship;
 
 import java.util.ArrayList;
@@ -56,34 +55,17 @@ public class ShipsUnloading extends Thread {
 
             fine = collectFines(cranes);
         }
+
+        System.out.println(fine + "\n");
     }
 
     public int collectFines(List<Crane> cranes) {
-        int pfine = 0;
+        int fine = 0;
 
         for (Crane crane : cranes) {
-            pfine += crane.getCraneFine();
+            fine += crane.getCraneFine();
         }
 
-        return pfine;
+        return fine;
     }
-
-    /*
-    public void printInfo() {
-        List<Ship> allShips = new ArrayList<>();
-        allShips.addAll(looseCargos);
-        allShips.addAll(liquidCargos);
-        allShips.addAll(containerCargos);
-
-        for (Ship ship : allShips) {
-            System.out.println("\nShip's name: " + ship.getName()
-                    + "\nShip's arrival time: " + ship.getArrivalTime()
-                    + "\nShip's unloading time: " + ship.getUnloadingTime()
-                    + "\nShip's cargo weight or quantity: " + ship.getCargo().getWeightOrQuantity());
-        }
-
-        //System.out.println("Total fine: " + fine + "\n");
-    }
-
-     */
 }

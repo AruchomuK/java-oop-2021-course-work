@@ -3,6 +3,7 @@ package service3;
 import lombok.Getter;
 import service1.ship.Ship;
 import service1.ship.ShipGenerator;
+import service2.JSONWriter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,6 +41,10 @@ public class Schedule {
         }
 
         schedule.sort(Comparator.comparingInt(Ship::getArrivalTime));
+
+        JSONWriter jsonWriter = new JSONWriter(schedule);
+        jsonWriter.writeSchedule();
+        jsonWriter.addManually(schedule);
 
         return schedule;
     }
