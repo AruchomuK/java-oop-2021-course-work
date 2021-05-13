@@ -1,10 +1,12 @@
 import service1.ship.Ship;
 import service2.JSONReader;
-import service3.Schedule;
-import service3.ShipsDistribution;
-import service3.ShipsUnloading;
+import service3.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,10 +22,23 @@ public class Main {
         ShipsUnloading liquidShipsUnloading = new ShipsUnloading(shipsDistribution.getLiquidCargos());
         ShipsUnloading containerShipsUnloading = new ShipsUnloading(shipsDistribution.getContainerCargos());
 
-        looseShipsUnloading.start();
-        liquidShipsUnloading.start();
-        containerShipsUnloading.start();
+        List<ShipsUnloading> unloadings = new ArrayList<>(3);
 
-        //shipsUnloading.printInfo();
+        unloadings.add(looseShipsUnloading);
+        unloadings.add(liquidShipsUnloading);
+        unloadings.add(containerShipsUnloading);
+
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        try {
+            List<Future<Object>> stat = executor.invokeAll(unloadings);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        executor.shutdown();
+
+        Statistics statistics = new Statistics(unloadings);
+        statistics.printInfo();
     }
 }

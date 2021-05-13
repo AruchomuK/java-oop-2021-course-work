@@ -4,14 +4,12 @@ import lombok.Getter;
 import service1.ship.Ship;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 
-public class ShipsUnloading extends Thread {
+public class ShipsUnloading implements Callable<Object> {
     private final int CRANE_PRICE = 30000;
 
     @Getter
@@ -20,8 +18,11 @@ public class ShipsUnloading extends Thread {
     @Getter
     private int fine = 0;
 
+    @Getter
     private List<Ship> ships;
+
     private ConcurrentLinkedQueue<Ship> queueOfShips;
+
     private List<Crane> cranes;
 
     public ShipsUnloading(List<Ship> ships) {
@@ -29,7 +30,7 @@ public class ShipsUnloading extends Thread {
     }
 
     @Override
-    public void run() {
+    public Crane call() throws Exception {
         while (fine >= CRANE_PRICE * cranesQuantity) {
             queueOfShips = new ConcurrentLinkedQueue<>(ships);
 
@@ -56,7 +57,7 @@ public class ShipsUnloading extends Thread {
             fine = collectFines(cranes);
         }
 
-        System.out.println(fine + "\n");
+        return (Crane) cranes;
     }
 
     public int collectFines(List<Crane> cranes) {
