@@ -1,3 +1,4 @@
+import service1.Schedule;
 import service1.ship.Ship;
 import service2.JSONReader;
 import service3.*;
@@ -14,7 +15,7 @@ public class Main {
         schedule.generateSchedule();
 
         JSONReader jsonReader = new JSONReader();
-        List<Ship> shipListFromSchedule = jsonReader.readSchedule();
+        List<Ship> shipListFromSchedule = jsonReader.readSchedule("schedule.json");
 
         ShipsDistribution shipsDistribution = new ShipsDistribution(shipListFromSchedule);
 
@@ -38,7 +39,7 @@ public class Main {
 
         executor.shutdown();
 
-        Statistics statistics = new Statistics(unloadings);
-        statistics.printInfo();
+        Statistics statistics = new Statistics();
+        statistics.printInfo(unloadings);
     }
 }

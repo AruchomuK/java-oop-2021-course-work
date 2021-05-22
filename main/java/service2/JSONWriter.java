@@ -3,9 +3,11 @@ package service2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import service1.cargo.Cargo;
 import service1.cargo.CargoType;
 import service1.ship.Ship;
+import service3.Statistics;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -13,9 +15,22 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public class JSONWriter {
     List<Ship> ships;
+
+    public void writeStatistics(Statistics statistics) {
+        final String filename = "statistics.json";
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            mapper.writeValue(Paths.get(filename).toFile(), statistics.getStatistics());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void writeSchedule() {
         final String filename = "schedule.json";

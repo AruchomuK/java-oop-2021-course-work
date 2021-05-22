@@ -10,7 +10,7 @@ public class ShipGenerator {
     public final int MAX_MODELING_MINUTES = 43200;
     private final int ALPHABET_LENGTH = 26;
 
-    int cranePerformance;
+    private int cranePerformance;
 
     Random rand = new Random();
 

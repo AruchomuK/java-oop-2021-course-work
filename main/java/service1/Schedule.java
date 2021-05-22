@@ -1,6 +1,7 @@
-package service3;
+package service1;
 
 import lombok.Getter;
+import org.springframework.web.bind.annotation.GetMapping;
 import service1.ship.Ship;
 import service1.ship.ShipGenerator;
 import service2.JSONWriter;
@@ -16,7 +17,7 @@ public class Schedule {
     private final int MAX_UNLOADING_DELAY_MINUTES = 1440;
 
     @Getter
-    List<Ship> schedule;
+    private List<Ship> schedule;
 
     Random rand = new Random();
 
@@ -27,6 +28,7 @@ public class Schedule {
     public int generateUnloadingDelay() {
         return rand.nextInt(MAX_UNLOADING_DELAY_MINUTES);
     }
+
 
     public List<Ship> generateSchedule() {
         schedule = new ArrayList<Ship>();

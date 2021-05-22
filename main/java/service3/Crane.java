@@ -38,7 +38,7 @@ public class Crane implements Callable<Object> {
                 craneFine += calculateFine(currentTime - nextShip.getArrivalTime());
             }
 
-            Thread.sleep(1);
+            Thread.sleep(10);
         }
         return null;
     }

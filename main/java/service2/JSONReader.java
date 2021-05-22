@@ -12,11 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JSONReader {
-    private final String filename = "schedule.json";
+    private String filename;
 
     List<Ship> ships;
 
-    public List<Ship> readSchedule() {
+    public List<Ship> readSchedule(String filename) {
         ships = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
